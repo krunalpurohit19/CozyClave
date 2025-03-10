@@ -1,59 +1,33 @@
 const express = require("express");
 const wrapAsync = require("../utils/wrapAsync");
 const router = express.Router();
-const User = require("../models/user.js");
 const passport = require("passport");
+const { saveRedirectUrl } = require("../middleware.js");
+const {
+  renderSignupForm,
+  signup,
+  renderLoginForm,
+  login,
+  logout,
+} = require("../controller/user.js");
 
-router.get("/signup", (req, res) => {
-  res.render("users/signup.ejs");
-});
+router.get("/signup", renderSignupForm);
 
-router.post(
-  "/signup",
-  wrapAsync(async (req, res) => {
-    try {
-      let { username, email, password } = req.body;
-      const newUser = new User({ email, username });
-      const registeredUser = await User.register(newUser, password);
-      console.log(registeredUser);
-      req.login(registeredUser, (err) => {
-        if (err) {
-          return next(err);
-        }
-        req.flash("success", "Welcome to CozyClave");
-        res.redirect("/listings");
-      });
-    } catch (e) {
-      req.flash("error", e.message);
-      res.redirect("/signup");
-    }
-  })
-);
+router.post("/signup", wrapAsync(signup));
 
-router.get("/login", (req, res) => {
-  res.render("users/login.ejs");
-});
+router.get("/login", renderLoginForm);
 
 router.post(
   "/login",
+  saveRedirectUrl,
   passport.authenticate("local", {
+    //using passport login process done automatically
     failureRedirect: "/login",
     failureFlash: true,
   }),
-  wrapAsync(async (req, res) => {
-    req.flash("success", "Welcome back to CozyClave");
-    res.redirect("/listings");
-  })
+  wrapAsync(login)
 );
 
-router.get("/logout", (req, res, next) => {
-  req.logOut((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.flash("success", "You are logged out!");
-    res.redirect("/listings");
-  });
-});
+router.get("/logout", logout);
 
 module.exports = router;
