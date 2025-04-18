@@ -1,26 +1,117 @@
 <% layout("/layouts/boilerplate") %>
+    <nav class="navbar navbar-expand-lg">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <div id="filters">
+                <div class="filter">
+                    <a href="/filter/popular">
+                        <div><i class="fa-solid fa-fire"></i></div>
+                        <p>popular</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/filter/rooms">
+                        <div><i class="fa-solid fa-bed"></i></div>
+                        <p>Rooms</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/filter/iconic-cities">
+                        <div><i class="fa-solid fa-mountain-city"></i></div>
+                        <p>Iconic Cities</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/filter/mountain">
+                        <div><i class="fa-solid fa-mountain"></i></div>
+                        <p>Mountain</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/">
+                        <div><i class="fa-brands fa-fort-awesome"></i></div>
+                        <p>Castles</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/">
+                        <div><i class="fa-solid fa-person-swimming"></i></div>
+                        <p>Amazing Pools</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/">
+                        <div><i class="fa-solid fa-campground"></i></div>
+                        <p>Camping</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/">
+                        <div><i class="fa-solid fa-cow"></i></div>
+                        <p>Farms</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/">
+                        <div><i class="fa-solid fa-snowflake"></i></div>
+                        <p>Arctic</p>
+                    </a>
+                </div>
+                <div class="filter">
+                    <a href="/">
+                        <div><i class="fa-solid fa-umbrella-beach"></i></div>
+                        <p>Beach</p>
+                    </a>
+                </div>
 
-    <body>
-        <h3>All Listings</h3>
-        <!-- <form action="/listings/new" method="get">
-        <button>Create New Listing</button>
-    </form> -->
-        <div class="row row-cols-lg-3 row-col-md-2 row-cols-sm-1">
-            <% for(let listing of allListings) { %>
-                <a href="/listings/<%= listing._id %>" class="listing-link">
-                    <div class="card col listing-card">
-                        <img src="<%= listing.image %>" class="card-img-top" alt="listing_img" style="height: 20rem;">
-                        <div class="card-img-overlay"></div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <b>
-                                    <%= listing.title %>
-                                </b> <br>
-                                &#8377 <%= listing.price.toLocaleString("en-IN")%> / night
-                            </p>
-                        </div>
+                <div class="tax-toggle">
+                    <div class="form-check-reverse form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
                     </div>
-                </a>
-                <% } %>
+                </div>
+            </div>
         </div>
-    </body>
+    </nav>
+
+    <div class="row row-cols-lg-3 row-col-md-2 row-cols-sm-1 mt-3">
+        <% for(let listing of allListings) { %>
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="card col listing-card">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_img" style="height: 20rem;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b>
+                                <%= listing.title %>
+                            </b> <br>
+                            &#8377 <%= listing.price.toLocaleString("en-IN")%> / night <br>
+                                <!-- Display the total price after taxes -->
+                                <strong class="tax-info"> &#8377 <%= listing.price + (listing.price *(18/100)) %> /
+                                        night
+                                        With
+                                        18% GST
+                                </strong>
+                        </p>
+                    </div>
+                </div>
+            </a>
+            <% } %>
+    </div>
+
+    <script>
+        let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+        taxSwitch.addEventListener("click", () => {
+            let taxInfo = document.getElementsByClassName("tax-info");
+            for (info of taxInfo) {
+                if (info.style.display != "inline") {
+                    info.style.display = "inline"
+                } else {
+                    info.style.display = "none"
+                }
+            }
+        })
+    </script>

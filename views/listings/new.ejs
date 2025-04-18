@@ -2,7 +2,7 @@
     <div class="row mt-3">
         <div class="col-8 offset-2">
             <h3>Create a New Listing</h3>
-            <form action="/listings" method="post" class="needs-validation" novalidate>
+            <form action="/listings" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" name="listing[title]" id="title" placeholder="Add a catchy title"
@@ -14,9 +14,8 @@
                     <div class="invalid-feedback">Enter a short description</div>
                 </div>
                 <div class="mb-3">
-                    <label for="image" class="form-label">Image Link</label>
-                    <input type="text" name="listing[image]" id="image" placeholder="Enter Image URL"
-                        class="form-control">
+                    <label for="image" class="form-label">Upload Image</label>
+                    <input type="file" name="listing[image]" id="image" class="form-control" required>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-4">
@@ -32,6 +31,21 @@
                         <div class="invalid-feedback">Enter a valid location
                         </div>
                     </div>
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select name="listing[category]" id="category" class="form-select" required>
+                        <option value="">Select a category</option>
+                        <option value="room">Rooms</option>
+                        <option value="iconic-cities">Iconic cities</option>
+                        <option value="mountain">Mountain</option>
+                        <option value="castle">Castle</option>
+                        <option value="amazing-pools">Amazing pools</option>
+                        <option value="camping">Camping</option>
+                        <option value="farms">Farms</option>
+                        <option value="arctic">Arctic</option>
+                        <option value="beach">Beaches</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="country" class="form-label">Country</label>

@@ -11,22 +11,20 @@ const {
   logout,
 } = require("../controller/user.js");
 
-router.get("/signup", renderSignupForm);
+router.route("/signup").get(renderSignupForm).post(wrapAsync(signup));
 
-router.post("/signup", wrapAsync(signup));
-
-router.get("/login", renderLoginForm);
-
-router.post(
-  "/login",
-  saveRedirectUrl,
-  passport.authenticate("local", {
-    //using passport login process done automatically
-    failureRedirect: "/login",
-    failureFlash: true,
-  }),
-  wrapAsync(login)
-);
+router
+  .route("/login")
+  .get(renderLoginForm)
+  .post(
+    saveRedirectUrl,
+    passport.authenticate("local", {
+      //using passport login process done automatically
+      failureRedirect: "/login",
+      failureFlash: true,
+    }),
+    wrapAsync(login)
+  );
 
 router.get("/logout", logout);
 

@@ -2,7 +2,8 @@
     <div class="row mt-3">
         <div class="col-8 offset-2">
             <h3>Edit Your Listing</h3>
-            <form method="post" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate>
+            <form method="post" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation" novalidate
+                enctype="multipart/form-data">
                 <!-- The _method=PUT query parameter is used to override the POST method and use the PUT method instead. -->
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
@@ -11,13 +12,17 @@
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea name="listing[description]" id="description"
-                        class="form-control" required><%= listing.description %></textarea>
+                    <textarea name="listing[description]" id="description" class="form-control"
+                        required><%= listing.description %></textarea>
+                </div>
+                <div class="mb-3">
+                    Original Image:
+                    <br>
+                    <img src="<%= originalImageUrl %>" alt="<%= listing.title %>">
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Image</label>
-                    <input type="text" name="listing[image]" id="image" value="<%= listing.image %>"
-                        class="form-control" required>
+                    <input type="file" name="listing[image]" id="image" class="form-control">
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-4">

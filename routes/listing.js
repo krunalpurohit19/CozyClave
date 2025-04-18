@@ -11,33 +11,40 @@ const {
   renderEditForm,
   updateListing,
   destroyListing,
+  filterListing,
 } = require("../controller/listing.js");
+const multer = require("multer");
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
-//Index Route
-router.get("/", wrapAsync(index));
+router
+  .route("/")
+  .get(wrapAsync(index))
+  .post(
+    isLoggedIn,
+    upload.single("listing[image]"),
+    validateListing,
+    wrapAsync(createListing)
+  );
 
 //New Route
 router.get("/new", isLoggedIn, renderNewForm);
 
-//Show Route
-router.get("/:id", wrapAsync(showListing));
-
-//Create Route
-router.post("/", isLoggedIn, validateListing, wrapAsync(createListing));
+router
+  .route("/:id")
+  .get(wrapAsync(showListing))
+  .put(
+    isLoggedIn,
+    isOwner,
+    upload.single("listing[image]"),
+    validateListing,
+    wrapAsync(updateListing)
+  )
+  .delete(isLoggedIn, isOwner, wrapAsync(destroyListing));
 
 //Edit Route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(renderEditForm));
 
-//Update Route
-router.put(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  validateListing,
-  wrapAsync(updateListing)
-);
-
-//Delete Route
-router.delete("/:id", isLoggedIn, isOwner, wrapAsync(destroyListing));
+router.get("/filter/:name", wrapAsync(filterListing));
 
 module.exports = router;
